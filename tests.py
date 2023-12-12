@@ -1,3 +1,5 @@
+import pytest
+
 from main import BooksCollector
 
 # не 9-10 конечно, но мне очень захотелось отработать эту тему
@@ -22,29 +24,16 @@ class TestBooksCollector:
         collector.add_new_book(name)
         assert len(collector.books_genre) == 0
 
-    def test_add_new_book_name_40_add_one_book(self):
+    @pytest.mark.parametrize('number', [39, 40])
+    def test_add_new_book_name_39_40_add_one_book(self, number):
         collector = BooksCollector()
-        name = 'SoLongNameOfTheFilmItShouldBe40Symbolsss'
-        collector.add_new_book(name)
-        collector.add_new_book(name)
-        assert len(collector.books_genre) == 1
-
-    def test_add_new_book_name_39_add_one_book(self):
-        collector = BooksCollector()
-        name = 'SoLongNameOfTheFilmItShouldBe40Symbols'
+        name = 'x' * number
         collector.add_new_book(name)
         collector.add_new_book(name)
         assert len(collector.books_genre) == 1
 
     def test_the_same_book_copy_is_not_added(self):
         collector = BooksCollector()
-        collector.add_new_book('Гордость и предубеждение и зомби')
-        collector.add_new_book('Гордость и предубеждение и зомби')
-        assert len(collector.books_genre) == 1
-
-    def test_the_triple_book_copy_is_not_added(self):
-        collector = BooksCollector()
-        collector.add_new_book('Гордость и предубеждение и зомби')
         collector.add_new_book('Гордость и предубеждение и зомби')
         collector.add_new_book('Гордость и предубеждение и зомби')
         assert len(collector.books_genre) == 1
