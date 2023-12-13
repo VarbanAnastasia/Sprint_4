@@ -2,41 +2,34 @@ import pytest
 
 from main import BooksCollector
 
-# не 9-10 конечно, но мне очень захотелось отработать эту тему
 
 class TestBooksCollector:
     def test_add_new_book_add_two_books(self):
         collector = BooksCollector()
         collector.add_new_book('Гордость и предубеждение и зомби')
         collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        assert len(collector.get_books_genre()) == 2
 
-        assert len(collector.books_genre) == 2
-
-    def test_add_new_book_without_genre_add_one_book(self):
+    @pytest.mark.parametrize('number', [0, 41])
+    def test_add_new_book_name_more_40_add_no_book(self, number):
         collector = BooksCollector()
-        collector.add_new_book('Eat.Pray.Love')
-        assert len(collector.books_genre) == 1
-
-
-    def test_add_new_book_name_more_40_add_no_book(self):
-        collector = BooksCollector()
-        name = 'SoLongNameOfTheFilmItShouldBeMoreThan40Symbols'
+        name = 'x' * number
         collector.add_new_book(name)
-        assert len(collector.books_genre) == 0
+        assert len(collector.get_books_genre()) == 0
 
-    @pytest.mark.parametrize('number', [39, 40])
-    def test_add_new_book_name_39_40_add_one_book(self, number):
+    @pytest.mark.parametrize('number', [1, 39, 40])
+    def test_add_new_book_name_boundaries_add_one_book(self, number):
         collector = BooksCollector()
         name = 'x' * number
         collector.add_new_book(name)
         collector.add_new_book(name)
-        assert len(collector.books_genre) == 1
+        assert len(collector.get_books_genre()) == 1
 
     def test_the_same_book_copy_is_not_added(self):
         collector = BooksCollector()
         collector.add_new_book('Гордость и предубеждение и зомби')
         collector.add_new_book('Гордость и предубеждение и зомби')
-        assert len(collector.books_genre) == 1
+        assert len(collector.get_books_genre()) == 1
 
     def test_set_book_genre_name_genre_in_books_genre(self):
         collector = BooksCollector()
@@ -47,7 +40,7 @@ class TestBooksCollector:
     def test_set_book_genre_name_not_added_zero(self):
         collector = BooksCollector()
         collector.set_book_genre('Гордость и предубеждение и зомби', 'Фантастика')
-        assert len(collector.books_genre) == 0
+        assert len(collector.get_books_genre()) == 0
 
     def test_set_book_genre_is_not_existed_none(self):
         collector = BooksCollector()
